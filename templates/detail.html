@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section>
+    <div class="container">
+        <div class="entry-list single">
+            <article>
+                <h1>{{ details[1] }}</h1>
+                <time datetime="2016-01-31">{{ details[2] }}</time>
+                <div class="entry">
+                    <h3>Time Spent: </h3>
+                    <p>{{ details[3] }} Hours</p>
+                </div>
+                <div class="entry">
+                    <h3>What I Learned:</h3>
+                    <p>{{ details[4] }}</p>
+                </div>
+                <div class="entry">
+                    <h3>Resources to Remember:</h3>
+                    <ul>
+                        {% for item in details[5] %}
+                        <li><a href="">{{ item }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </article>
+        </div>
+    </div>
+    <div class="edit">
+        <p><a href="edit.html">Edit Entry</a></p>
+    </div>
+</section>
+{% endblock %}

@@ -36,7 +36,14 @@ def add_data(title, date, time_spent, what_learned, resources):
     except IntegrityError:
         return False
 
-def update_data()
+
+def update_data(an_id, title, date, time_spent, what_learned, resources):
+    Entry.update({Entry.entry_title: title,
+                  Entry.entry_date: date,
+                  Entry.time_spent: time_spent,
+                  Entry.what_learned: what_learned,
+                  Entry.resources: resources}
+                 ).where(Entry.entry_id == int(an_id)).execute()
 
 
 def get_data(id=None):
@@ -78,11 +85,11 @@ def index():
     return render_template("index.html", titledates=list_of_items)
 
 
-@app.route("/entries/<int:id>")
-def view_details(id):
+@app.route("/entries/<int:an_id>")
+def view_details(an_id):
     initialize()
     list_of_entries = get_data()
-    detail_data = list_of_entries[id- 1]
+    detail_data = list_of_entries[an_id - 1]
     return render_template("detail.html", details=detail_data)
 
 
@@ -102,23 +109,24 @@ def add_new():
         return index()
 
 
-@app.route("/entries/<int:id>/edit", methods=["GET", "POST"])
-def edit(id):
+@app.route("/entries/<an_id>/edit", methods=["GET", "POST"])
+def edit(an_id):
     initialize()
     if request.method == "GET":
-        an_entry = get_data(id)
+        an_entry = get_data(an_id)
         resources_string = ", ".join(an_entry[5])
         new_entry = an_entry[0:5]
         new_entry.append(resources_string)
         return render_template("edit.html", details=an_entry)
     elif request.method == "POST":
         data = dict(request.form.items())
-        add_data(data["title"],
-                 data["date"],
-                 data['timeSpent'],
-                 data["whatILearned"],
-                 data["ResourcesToRemember"]
-                 )
+        update_data(an_id,
+                    data["title"],
+                    data["date"],
+                    data['timeSpent'],
+                    data["whatILearned"],
+                    data["ResourcesToRemember"]
+                    )
         return index()
 
 
